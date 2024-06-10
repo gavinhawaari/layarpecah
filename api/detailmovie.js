@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
 
     // Mengambil nilai parameter slugs dan server dari permintaan
     const slugs = req.query.slugs || '';
-    const server = req.query.server || '';
+    const server = req.query.server || '3';
 
     // Memeriksa apakah parameter slugs dan server telah diberikan
     if (!slugs) {
