@@ -1,6 +1,7 @@
 const https = require('https');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
+const serverUrl = require('./targeturl');
 
 module.exports = async (req, res) => {
     // Menambahkan header CORS ke dalam respons
@@ -14,7 +15,23 @@ module.exports = async (req, res) => {
         return;
     }
 
-    const url = 'https://new6.ngefilm21.yachts/dinda-2024/?player=3';
+    // Mengambil nilai parameter slugs dan numberserver dari permintaan
+    const slugs = typeof req.query.slugs === 'string' ? req.query.slugs : '';
+    const server = typeof req.query.server === 'string' ? req.query.server : '';
+
+    // Memeriksa apakah parameter slugs dan server telah diberikan
+    if (!slugs) {
+        res.status(400).json({ error: 'Parameter slug movies tidak ditemukan' });
+        return;
+    }
+
+    if (!server) {
+        res.status(400).json({ error: 'Parameter server movies tidak ditemukan' });
+        return;
+    }
+
+    // Menggunakan backticks untuk interpolasi string pada URL dengan variabel serverUrl
+    const url = `${serverUrl}${slugs}/?player=${server}`;
 
     https.get(url, (response) => {
         let data = '';
