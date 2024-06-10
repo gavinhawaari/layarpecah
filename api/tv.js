@@ -59,19 +59,23 @@ module.exports = async (req, res) => {
 
             episodeElements.forEach(element => {
                 const title = element.textContent.trim();
-                const slug = element.getAttribute('href').trim();
-                episodes.push({
-                    titleepisode: title,
-                    slugepisode: slug
-                });
+                if (title !== 'Pilih Episode') {
+                    let slug = element.getAttribute('href').trim();
+                    // Menghapus bagian "https" dan domain dari slug menggunakan regex
+                    slug = slug.replace(/^https?:\/\/[^/]+/, '');
+                    episodes.push({
+                        titleepisode: title,
+                        slugepisode: slug
+                    });
+                }
             });
 
             // Membuat objek detail movie
             const detailMovieObject = {
                 simpinis,
+                iframeUrl,
                 detailMovie,
-                episodes,
-                iframeUrl
+                episodes
             };
 
             res.status(200).json(detailMovieObject);
