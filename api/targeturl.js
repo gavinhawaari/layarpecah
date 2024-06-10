@@ -1,4 +1,4 @@
 // api/serverurl.js
 
-const targetUrl = 'https://bolasiar.cc/';
+const targetUrl = 'https://new6.ngefilm21.yachts/';
 module.exports = targetUrl;
