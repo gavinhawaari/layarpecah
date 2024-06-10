@@ -1,7 +1,7 @@
 const https = require('https');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
-const serverUrl = require('./targeturl');
+const targetUrl = require('./targeturl');
 
 module.exports = async (req, res) => {
     // Menambahkan header CORS ke dalam respons
@@ -15,9 +15,9 @@ module.exports = async (req, res) => {
         return;
     }
 
-    // Mengambil nilai parameter slugs dan numberserver dari permintaan
-    const slugs = typeof req.query.slugs === 'string' ? req.query.slugs : '';
-    const server = typeof req.query.server === 'string' ? req.query.server : '';
+    // Mengambil nilai parameter slugs dan server dari permintaan
+    const slugs = req.query.slugs || '';
+    const server = req.query.server || '';
 
     // Memeriksa apakah parameter slugs dan server telah diberikan
     if (!slugs) {
@@ -30,10 +30,7 @@ module.exports = async (req, res) => {
         return;
     }
 
-    // Menggunakan backticks untuk interpolasi string pada URL dengan variabel serverUrl
-    const url = `${serverUrl}${slugs}/?player=${server}`;
-
-    https.get(url, (response) => {
+    https.get(targetUrl + slugs + `?player=${server}`, (response) => {
         let data = '';
 
         // Mengumpulkan data yang diterima
