@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
             const dom = new JSDOM(data);
             const document = dom.window.document;
 
-            const articles = document.querySelectorAll('article[class="item col-md-20"]');
+            const articles = document.querySelectorAll('article[class='item col-md-20']');
             let results = [];
 
             articles.forEach(article => {
