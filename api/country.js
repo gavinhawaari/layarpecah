@@ -15,16 +15,16 @@ module.exports = async (req, res) => {
         return;
     }
 
-    const negara = req.query.negara || '';
-    // Memeriksa apakah parameter negara telah diberikan
-    if (!negara) {
-        res.status(400).json({ error: 'Parameter negara  tidak ditemukan' });
+    const code = req.query.code || '';
+    // Memeriksa apakah parameter code telah diberikan
+    if (!code) {
+        res.status(400).json({ error: 'Parameter code=indonesia atau negara tidak ditemukan' });
         return;
     }
 
     const pages = req.query.pages !== undefined ? req.query.pages : 1;
     
-    let url = `${targetUrl}country/${negara}/`;
+    let url = `${targetUrl}country/${code}/`;
     if (pages !== 1) {
         url += `page/${pages}/`;
     }
@@ -56,8 +56,8 @@ module.exports = async (req, res) => {
                 // Menghapus bagian "https" dan domain dari slug menggunakan regex
                 slug = slug.replace(/^https?:\/\/[^/]+/, '');
 
-                // menghapus bagian symbol slash awal
-                slug = slug.replace('/', '');
+                // Menghapus simbol slash ('/') pertama dan terakhir dari slug
+                slug = slug.replace(/^\/|\/$/g, '');
                 
                 results.push({
                     poster,
