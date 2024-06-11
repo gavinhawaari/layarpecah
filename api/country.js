@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
 
     const pages = req.query.pages !== undefined ? req.query.pages : 1;
     
-    let url = `${targetUrl}/country/${negara}/`;
+    let url = `${targetUrl}country/${negara}/`;
     if (pages !== 1) {
         url += `page/${pages}/`;
     }
@@ -53,9 +53,12 @@ module.exports = async (req, res) => {
                 // Menghapus bagian "https" dan domain dari slug menggunakan regex
                 slug = slug.replace(/^https?:\/\/[^/]+/, '');
 
+                // menghapus bagian symbol slash awal
+                slug = slug.replace('/', '');
+                
                 // Menetapkan nilai type berdasarkan nilai slug
                 const type = slug.includes('/tv/') ? 'tv' : 'movie';
-
+   
                 results.push({
                     poster,
                     title,
