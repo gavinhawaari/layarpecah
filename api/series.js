@@ -69,6 +69,8 @@ module.exports = async (req, res) => {
                     let slug = element.getAttribute('href').trim();
                     // Menghapus bagian "https" dan domain dari slug menggunakan regex
                     slug = slug.replace(/^https?:\/\/[^/]+/, '');
+                    // menghapus bagian symbol slash pertama
+                    slug = slug.replace('/', '');
                     episodes.push({
                         titleepisode: title,
                         slugepisode: slug
