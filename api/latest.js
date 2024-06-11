@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
 
     const pages = req.query.pages !== undefined ? req.query.pages : 1;
     
-    let url = `${targetUrl}/`;
+    let url = `${targetUrl}`;
     if (pages !== 1) {
         url += `page/${pages}/`;
     }
