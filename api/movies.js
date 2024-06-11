@@ -25,12 +25,9 @@ module.exports = async (req, res) => {
         return;
     }
 
-    if (!server) {
-        res.status(400).json({ error: 'Parameter server movies tidak ditemukan' });
-        return;
-    }
+    
 
-    https.get(targetUrl + slugs + `?player=${server}`, (response) => {
+    https.get(targetUrl + slugs, (response) => {
         let data = '';
 
         // Mengumpulkan data yang diterima
@@ -63,15 +60,26 @@ module.exports = async (req, res) => {
                 detailMovie.push(detailObject);
             });
 
-            // Mengambil URL dari elemen iframe
-            const iframeElement = document.querySelector('iframe');
-            const iframeUrl = iframeElement ? iframeElement.getAttribute('src') : 'N/A';
+            // Mengambil URL dari elemen iframe youtube
+            const iframeElement = document.querySelector('a.gmr-trailer-popup');
+            const trailer = iframeElement ? iframeElement.getAttribute('href') : 'N/A';
+
+            // Mengambil Poster
+            const posterElement = document.querySelector('figure img');
+            const poster = posterElement ? posterElement.getAttribute('src') : 'N/A';
+
+            // Mengambil title
+            const titleElement = document.querySelector('h1.entry-title');
+            const title = titleElement ? titleElement.textContent.trim() : 'N/A';
+
 
             // Membuat objek detail movie
             const detailMovieObject = {
+                title,
+                poster,
                 simpinis,
                 detailMovie,
-                iframeUrl
+                trailer
             };
 
             res.status(200).json(detailMovieObject);
