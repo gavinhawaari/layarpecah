@@ -1,6 +1,7 @@
 const https = require('https');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
+const targetUrl = require('./targeturl');
 
 module.exports = async (req, res) => {
     // Menambahkan header CORS ke dalam respons
@@ -14,10 +15,18 @@ module.exports = async (req, res) => {
         return;
     }
 
-    const numberpage = req.query.numberpage !== undefined ? req.query.numberpage : 1;
-    let url = 'https://new6.ngefilm21.yachts/country/indonesia/';
-    if (numberpage !== 1) {
-        url += `page/${numberpage}/`;
+    const negara = req.query.negara || '';
+    // Memeriksa apakah parameter negara telah diberikan
+    if (!negara) {
+        res.status(400).json({ error: 'Parameter negara  tidak ditemukan' });
+        return;
+    }
+
+    const pages = req.query.pages !== undefined ? req.query.pages : 1;
+    
+    let url = `${targetUrl}/country/${negara}/`;
+    if (pages !== 1) {
+        url += `page/${pages}/`;
     }
 
     https.get(url, (response) => {
