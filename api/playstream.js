@@ -33,9 +33,10 @@ module.exports = async (req, res) => {
     // Loop melalui setiap slug dan ambil data dari server
     for (const slug of slugArray) {
         const urls = [
-            `https://new6.ngefilm21.yachts/${slug}/?player=2`,
-            `https://new6.ngefilm21.yachts/${slug}/?player=3`,
-            `https://new6.ngefilm21.yachts/${slug}/?player=4`
+            `${targetUrl}${slug}/?player=2`,
+            `${targetUrl}${slug}/?player=3`,
+            `${targetUrl}${slug}/?player=4`,
+            `${targetUrl}${slug}/?player=5`,
         ];
 
         const promises = urls.map(url => {
