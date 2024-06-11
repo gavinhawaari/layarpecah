@@ -49,6 +49,9 @@ module.exports = async (req, res) => {
                 const poster = article.querySelector('img') ? article.querySelector('img').getAttribute('src') : 'N/A';
                 const title = article.querySelector('h2') ? article.querySelector('h2').textContent.trim() : 'N/A';
                 let slug = article.querySelector('h2 a') ? article.querySelector('h2 a').getAttribute('href') : 'N/A';
+
+                // Menetapkan nilai type berdasarkan nilai slug
+                const type = slug.includes('/tv/') ? 'tv' : 'movie';
                 
                 // Menghapus bagian "https" dan domain dari slug menggunakan regex
                 slug = slug.replace(/^https?:\/\/[^/]+/, '');
@@ -56,9 +59,6 @@ module.exports = async (req, res) => {
                 // menghapus bagian symbol slash awal
                 slug = slug.replace('/', '');
                 
-                // Menetapkan nilai type berdasarkan nilai slug
-                const type = slug.includes('/tv/') ? 'tv' : 'movie';
-   
                 results.push({
                     poster,
                     title,
