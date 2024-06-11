@@ -22,7 +22,9 @@ module.exports = async (req, res) => {
         return;
     }
 
-    https.get(targetUrl + slugs, (response) => {
+    let url = `${targetUrl}${slugs}/`;
+
+    https.get(url, (response) => {
         let data = '';
 
         // Mengumpulkan data yang diterima
@@ -55,9 +57,18 @@ module.exports = async (req, res) => {
                 detailMovie.push(detailObject);
             });
 
-            // Mengambil URL dari elemen iframe
+            // Mengambil URL dari elemen iframe youtube
             const iframeElement = document.querySelector('iframe');
-            const iframeUrl = iframeElement ? iframeElement.getAttribute('src') : 'N/A';
+            const trailer = iframeElement ? iframeElement.getAttribute('src') : 'N/A';
+
+            // Mengambil Poster
+            const posterElement = document.querySelector('figure img');
+            const poster = posterElement ? posterElement.getAttribute('src') : 'N/A';
+
+            // Mengambil title
+            const titleElement = document.querySelector('h1.entry-title');
+            const title = titleElement ? titleElement.textContent.trim() : 'N/A';
+
 
             // Mengambil semua data episode
             const episodeElements = document.querySelectorAll('div.gmr-listseries a.button.button-shadow');
@@ -69,8 +80,8 @@ module.exports = async (req, res) => {
                     let slug = element.getAttribute('href').trim();
                     // Menghapus bagian "https" dan domain dari slug menggunakan regex
                     slug = slug.replace(/^https?:\/\/[^/]+/, '');
-                    // menghapus bagian symbol slash pertama
-                    slug = slug.replace('/', '');
+                    // Menghapus simbol slash ('/') pertama dan terakhir dari slug
+                    slug = slug.replace(/^\/|\/$/g, '');
                     episodes.push({
                         titleepisode: title,
                         slugepisode: slug
@@ -80,10 +91,12 @@ module.exports = async (req, res) => {
 
             // Membuat objek detail movie
             const detailMovieObject = {
+                title,
+                poster,
                 simpinis,
                 detailMovie,
                 episodes,
-                iframeUrl
+                trailer
             };
 
             res.status(200).json(detailMovieObject);
