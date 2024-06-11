@@ -44,12 +44,14 @@ module.exports = async (req, res) => {
                 const title = article.querySelector('h2') ? article.querySelector('h2').textContent.trim() : 'N/A';
                 let slug = article.querySelector('h2 a') ? article.querySelector('h2 a').getAttribute('href') : 'N/A';
                 
+                const type = slug.includes('/tv/') ? 'tv' : 'movie';
+                
                 // Menghapus bagian "https" dan domain dari slug menggunakan regex
                 slug = slug.replace(/^https?:\/\/[^/]+/, '');
-
-                // Menetapkan nilai type berdasarkan nilai slug
-                const type = slug.includes('/tv/') ? 'tv' : 'movie';
-
+                
+                // menghapus bagian symbol slash
+                slug = slug.replace(/\//g, '');
+                
                 results.push({
                     poster,
                     title,
