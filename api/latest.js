@@ -49,8 +49,8 @@ module.exports = async (req, res) => {
                 // Menghapus bagian "https" dan domain dari slug menggunakan regex
                 slug = slug.replace(/^https?:\/\/[^/]+/, '');
                 
-                // menghapus bagian symbol slash
-                slug = slug.replace('/', '');
+                // Menghapus simbol slash ('/') pertama dan terakhir dari slug
+                slug = slug.replace(/^\/|\/$/g, '');
                 
                 results.push({
                     poster,
