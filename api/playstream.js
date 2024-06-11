@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
             `${targetUrl}${slug}/?player=2`,
             `${targetUrl}${slug}/?player=3`,
             `${targetUrl}${slug}/?player=4`,
-            `${targetUrl}${slug}/?player=5`,
+            `${targetUrl}${slug}/?player=5`
         ];
 
         const promises = urls.map(url => {
