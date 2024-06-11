@@ -1,6 +1,7 @@
 const https = require('https');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
+const targetUrl = require('./targeturl');
 
 module.exports = async (req, res) => {
     // Menambahkan header CORS ke dalam respons
@@ -14,9 +15,14 @@ module.exports = async (req, res) => {
         return;
     }
 
-    const url = 'https://new6.ngefilm21.yachts/tv/the-atypical-family-2024/';
+    const slugs = req.query.slugs || '';
+    // Memeriksa apakah parameter slugs telah diberikan
+    if (!slugs) {
+        res.status(400).json({ error: 'Parameter slugs series tidak ditemukan' });
+        return;
+    }
 
-    https.get(url, (response) => {
+    https.get(targetUrl + slugs, (response) => {
         let data = '';
 
         // Mengumpulkan data yang diterima
