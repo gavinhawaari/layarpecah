@@ -28,66 +28,55 @@ module.exports = async (req, res) => {
     const slugArray = slugs.split(',');
 
     // Menyiapkan array untuk menyimpan hasil dari setiap slug
-    const promises = slugArray.map(slug => {
-        return new Promise((resolve, reject) => {
-            const urls = [
-                `https://new6.ngefilm21.yachts/${slug}/?player=2`,
-                `https://new6.ngefilm21.yachts/${slug}/?player=3`,
-                `https://new6.ngefilm21.yachts/${slug}/?player=4`
-            ];
+    const results = [];
 
-            const promises = urls.map(url => {
-                return new Promise((resolve, reject) => {
-                    https.get(url, (response) => {
-                        let data = '';
+    // Loop melalui setiap slug dan ambil data dari server
+    for (const slug of slugArray) {
+        const urls = [
+            `https://new6.ngefilm21.yachts/${slug}/?player=2`,
+            `https://new6.ngefilm21.yachts/${slug}/?player=3`,
+            `https://new6.ngefilm21.yachts/${slug}/?player=4`
+        ];
 
-                        // Mengumpulkan data yang diterima
-                        response.on('data', (chunk) => {
-                            data += chunk;
-                        });
+        const promises = urls.map(url => {
+            return new Promise((resolve, reject) => {
+                https.get(url, (response) => {
+                    let data = '';
 
-                        // Proses data setelah selesai diterima
-                        response.on('end', () => {
-                            const dom = new JSDOM(data);
-                            const document = dom.window.document;
-
-                            // Mengambil URL dari elemen iframe
-                            const iframeElement = document.querySelector('iframe');
-                            const urlstream = iframeElement ? iframeElement.getAttribute('src') : 'N/A';
-
-                            // Membuat objek detail movie
-                            const detailMovieObject = {
-                                urlstream
-                            };
-
-                            resolve(detailMovieObject);
-                        });
-
-                    }).on('error', (err) => {
-                        reject(err);
+                    // Mengumpulkan data yang diterima
+                    response.on('data', (chunk) => {
+                        data += chunk;
                     });
+
+                    // Proses data setelah selesai diterima
+                    response.on('end', () => {
+                        const dom = new JSDOM(data);
+                        const document = dom.window.document;
+
+                        // Mengambil URL dari elemen iframe
+                        const iframeElement = document.querySelector('iframe');
+                        const urlstream = iframeElement ? iframeElement.getAttribute('src') : 'N/A';
+
+                        // Push objek detail movie ke dalam array results
+                        results.push({ urlstream });
+
+                        resolve();
+                    });
+
+                }).on('error', (err) => {
+                    reject(err);
                 });
             });
-
-            Promise.all(promises)
-                .then(results => {
-                    const responseObject = results.reduce((acc, curr, index) => {
-                        return { ...acc, [`server${index + 2}`]: curr };
-                    }, {});
-                    resolve({ [slug]: responseObject });
-                })
-                .catch(error => {
-                    reject(error);
-                });
         });
-    });
 
-    Promise.all(promises)
-        .then(results => {
-            const responseObject = results.reduce((acc, curr) => Object.assign(acc, curr), {});
-            res.status(200).json(responseObject);
-        })
-        .catch(error => {
+        try {
+            await Promise.all(promises);
+        } catch (error) {
             res.status(500).json({ error: error.message });
-        });
+            return;
+        }
+    }
+
+    // Mengirim hasil sebagai respons
+    res.status(200).json(results);
 };
