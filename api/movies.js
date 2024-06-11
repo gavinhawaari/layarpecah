@@ -25,9 +25,9 @@ module.exports = async (req, res) => {
         return;
     }
 
-    
+    let url = `${targetUrl}${slugs}/`;
 
-    https.get(targetUrl + slugs, (response) => {
+    https.get(url, (response) => {
         let data = '';
 
         // Mengumpulkan data yang diterima
