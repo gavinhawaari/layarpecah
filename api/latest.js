@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
                 slug = slug.replace(/^https?:\/\/[^/]+/, '');
                 
                 // menghapus bagian symbol slash
-                slug = slug.replace(/\//g, '');
+                slug = slug.replace('/', '');
                 
                 results.push({
                     poster,
