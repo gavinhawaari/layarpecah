@@ -9,7 +9,7 @@ app.use((req, res, next) => {
 });
 
 // Endpoint untuk melakukan proxy terhadap URL yang diberikan
-app.get('/server', async (req, res) => {
+app.get('/api/server', async (req, res) => {
   const iframeUrl = req.query.iframe;
 
   try {
