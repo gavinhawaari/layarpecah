@@ -1,7 +1,7 @@
 const https = require('https');
 const { JSDOM } = require('jsdom');
 
-const url = 'https://vidhidevip.com/embed/4tmz2fskh2cb';
+const url = 'https://swhoi.com/e/035cyvwl1i4e';
 const referer = 'https://new7.ngefilm21.yachts/13-bomb-di-jakarta-2023/';
 
 // Fungsi untuk mengambil konten halaman web
