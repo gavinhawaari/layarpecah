@@ -1,35 +1,40 @@
 const express = require('express');
 const axios = require('axios');
 const app = express();
+const port = process.env.PORT || 3000;
 
-app.get('/api/server', async (req, res) => {
-    const videoUrl = req.query.url;
-    const referer = 'https://artist.dutamovie21.cloud/eps/open-bo-lagi-semakin-panas-semakin-ganas-s01-ep01/';
-
-    try {
-        const response = await axios.get(videoUrl, {
-            headers: {
-                'Referer': referer,
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-                'User-Agent': 'Mozilla/5.0 (Linux; Android 11; RMX3231 Build/RP1A.201005.001) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.148 Mobile Safari/537.36',
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache',
-                'Connection': 'keep-alive'
-            },
-            responseType: 'text', // Change responseType to 'text'
-            responseEncoding: 'utf8' // Specify responseEncoding to ensure correct character encoding
-        });
-
-        // Set the content type to text/html with UTF-8 encoding
-        res.setHeader('Content-Type', 'text/html; charset=UTF-8');
-        res.send(response.data);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error fetching the video!!');
-    }
+// Middleware untuk mengizinkan CORS (Cross-Origin Resource Sharing)
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
 });
 
-const port = process.env.PORT || 3000;
+// Endpoint untuk melakukan proxy terhadap URL yang diberikan
+app.get('/api/server', async (req, res) => {
+  const iframeUrl = req.query.iframe;
+
+  try {
+    // Konfigurasi untuk Axios
+    const axiosConfig = {
+      headers: {
+        'Referer': 'https://new8.ngefilm21.yachts/',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 11; RMX3231 Build/RP1A.201005.001) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.148 Mobile Safari/537.36'
+      }
+    };
+
+    // Melakukan GET request ke URL iframe yang diberikan dengan header Referer
+    const response = await axios.get(iframeUrl, axiosConfig);
+
+    // Mengembalikan response dari URL tersebut ke client
+    res.send(response.data);
+  } catch (error) {
+    // Mengembalikan error jika terjadi masalah dalam melakukan request
+    res.status(500).send('Error fetching iframe URL');
+  }
+});
+
+// Server listening di port yang ditentukan oleh Vercel atau 3000 jika lokal
 app.listen(port, () => {
-    console.log(`Proxy server running at http://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
 });
