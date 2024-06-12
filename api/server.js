@@ -4,7 +4,7 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 
-app.get('/server', async (req, res) => {
+app.get('/api/server', async (req, res) => {
     const videoUrl = req.query.url;
     const referer = 'https://new8.ngefilm21.yachts/';
 
