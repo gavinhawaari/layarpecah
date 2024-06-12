@@ -6,7 +6,7 @@ const app = express();
 
 app.get('/api/server', async (req, res) => {
     const videoUrl = req.query.url;
-    const referer = 'https://new8.ngefilm21.yachts/';
+    const referer = 'https://artist.dutamovie21.cloud/eps/open-bo-lagi-semakin-panas-semakin-ganas-s01-ep01/';
 
     try {
         const response = await axios.get(videoUrl, {
