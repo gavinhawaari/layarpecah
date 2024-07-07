@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
         return;
     }
 
-    const urls = 'https://artist.dutamovie21.cloud/';
+    const urls = 'https://netflix.dutamovie21.cloud/';
     let url = `${urls}?s=${search}&search=advanced&post_type=&index=&orderby=&genre=&movieyear=&country=indonesia&quality=`;
   
 
